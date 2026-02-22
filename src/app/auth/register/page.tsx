@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
@@ -41,6 +42,8 @@ export default function RegisterPage() {
         return;
       }
 
+      toast.success("Registration successful! Redirecting to login...");
+
       // Success — redirect to login
       router.push("/auth/login");
     } catch (err: unknown) {
@@ -60,7 +63,7 @@ export default function RegisterPage() {
     <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
       <div className="w-full max-w-md rounded-lg p-8 shadow-lg">
         <h2 className="mb-6 text-2xl font-bold text-center text-primary">
-          Register for MediStore
+          Register
         </h2>
 
         {error && (
