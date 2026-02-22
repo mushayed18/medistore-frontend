@@ -4,7 +4,7 @@ import { IoBagHandleOutline } from "react-icons/io5";
 
 export default function HeroBanner() {
   return (
-    <section className="relative overflow-hidden bg-secondary">
+    <section className="relative overflow-hidden bg-secondary w-full">
       <div className="mx-auto flex max-w-7xl flex-col items-center px-6 lg:flex-row lg:px-8">
         {/* Left content */}
         <div className="flex flex-1 flex-col justify-center py-16 lg:py-24">
