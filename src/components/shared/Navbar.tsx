@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useCurrentUser } from "@/hooks/useAuth"; // ← import hook
-import { Avatar,AvatarBadge, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarBadge, AvatarFallback } from "@/components/ui/avatar";
 
 export default function Navbar() {
   const { user, loading, logout } = useCurrentUser();
@@ -50,10 +50,37 @@ export default function Navbar() {
   return (
     <nav className="bg-primary text-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
+        <div className="flex justify-between h-16 items-center text-white">
           {/* Logo */}
-          <Link href="/" className="text-2xl font-bold">
-            MediStore
+          <Link href={"/"}>
+            <div className="flex items-center gap-2">
+              {/* Medical cross icon */}
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 32 32"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="text-white"
+              >
+                <circle
+                  cx="16"
+                  cy="16"
+                  r="15"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                />
+                <path
+                  d="M16 8v16M8 16h16"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
+              </svg>
+              <span className="font-serif text-3xl tracking-wide">
+                MediStore
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Links */}
@@ -89,7 +116,10 @@ export default function Navbar() {
                 </button>
               </div>
             ) : (
-              <Link href="/auth/login" className="hover:text-secondary transition">
+              <Link
+                href="/auth/login"
+                className="hover:text-secondary transition"
+              >
                 Login
               </Link>
             )}
@@ -101,11 +131,26 @@ export default function Navbar() {
             onClick={() => setIsOpen(!isOpen)}
           >
             {/* Hamburger icon */}
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               {isOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16m-7 6h7"
+                />
               )}
             </svg>
           </button>
