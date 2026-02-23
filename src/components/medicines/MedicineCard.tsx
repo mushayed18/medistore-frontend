@@ -1,6 +1,8 @@
 import { Medicine } from "@/types/medicine.type";
 import { FaCapsules, FaIndustry } from "react-icons/fa";
 import { MdCategory } from "react-icons/md";
+import Link from "next/link";
+import { FaArrowRight } from "react-icons/fa";
 
 interface Props {
   medicine: Medicine;
@@ -8,35 +10,49 @@ interface Props {
 
 export default function MedicineCard({ medicine }: Props) {
   return (
-    <div className="bg-white shadow-md rounded-xl p-5 border border-secondary hover:shadow-lg transition">
-      
-      <h2 className="text-lg font-semibold text-primary flex items-center gap-2">
-        <FaCapsules />
-        {medicine.name}
-      </h2>
+    <div className="group bg-white rounded-xl shadow-md overflow-hidden border border-secondary/30 hover:shadow-xl hover:border-secondary transition-all duration-300">
+      {/* Image placeholder */}
+      <div className="h-48 bg-linear-to-br from-primary/5 to-secondary/10 flex items-center justify-center">
+        <FaCapsules className="text-8xl text-primary/20" />
+      </div>
 
-      <p className="text-sm text-gray-600 mt-2 line-clamp-2">
-        {medicine.description}
-      </p>
+      <div className="p-5">
+        <h3 className="text-lg font-semibold text-primary group-hover:text-primary/80 transition-colors line-clamp-2">
+          {medicine.name}
+        </h3>
 
-      <div className="mt-4 space-y-1 text-sm">
-        <p className="flex items-center gap-2">
-          <FaIndustry className="text-primary" />
-          {medicine.manufacturer}
+        <p className="text-sm text-gray-600 mt-2 line-clamp-2">
+          {medicine.description}
         </p>
 
-        <p className="flex items-center gap-2">
-          <MdCategory className="text-primary" />
-          {medicine.category.name}
-        </p>
+        <div className="mt-4 space-y-2 text-sm">
+          <p className="flex items-center gap-2 text-gray-700">
+            <FaIndustry className="text-primary" />
+            {medicine.manufacturer}
+          </p>
 
-        <p className="font-semibold text-primary mt-2">
-          ${medicine.price}
-        </p>
+          <p className="flex items-center gap-2 text-gray-700">
+            <MdCategory className="text-primary" />
+            {medicine.category.name}
+          </p>
 
-        <p className={`text-xs ${medicine.stock > 0 ? "text-green-600" : "text-red-600"}`}>
-          {medicine.stock > 0 ? "In Stock" : "Out of Stock"}
-        </p>
+          <p className="font-bold text-xl text-primary mt-3">
+            ৳{medicine.price.toFixed(2)}
+          </p>
+
+          <p className={`text-sm font-medium ${
+            medicine.stock > 0 ? "text-green-600" : "text-red-600"
+          }`}>
+            {medicine.stock > 0 ? `In Stock (${medicine.stock})` : "Out of Stock"}
+          </p>
+        </div>
+
+        <Link
+          href={`/medicines/${medicine.id}`}
+          className="mt-4 inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition"
+        >
+          View Details <FaArrowRight size={14} />
+        </Link>
       </div>
     </div>
   );
