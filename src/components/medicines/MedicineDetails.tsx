@@ -1,8 +1,12 @@
+"use client";
+
 import { Medicine } from "@/types/medicine";
 import ReviewList from "./ReviewList";
 import { Star, Package, Factory, Tags, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useCart } from "@/lib/cart-context";
+import Link from "next/link";
 
 interface Props {
   medicine: Medicine;
@@ -14,6 +18,8 @@ export default function MedicineDetails({ medicine }: Props) {
       ? medicine.reviews.reduce((sum, r) => sum + r.rating, 0) /
         medicine.reviews.length
       : 0;
+
+  const { addToCart } = useCart();
 
   return (
     <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
@@ -124,15 +130,29 @@ export default function MedicineDetails({ medicine }: Props) {
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 pt-6">
-              <Button className="flex-1 bg-[#503217] hover:bg-[#503217]/90 text-white text-lg py-7 rounded-xl shadow-md">
+              <Button
+                type="button"
+                className="flex-1 bg-primary hover:bg-primary/90 text-white text-lg py-7 rounded-xl cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addToCart({
+                    id: medicine.id,
+                    name: medicine.name,
+                    price: medicine.price,
+                    quantity: 1, // default 1, or make input later
+                  });
+                }}
+              >
                 Add to Cart
               </Button>
-              <Button
-                variant="outline"
-                className="flex-1 border-[#503217] text-[#503217] hover:bg-[#503217]/10 text-lg py-7 rounded-xl"
-              >
-                Buy Now
-              </Button>
+
+              
+                <Button
+                  variant="outline"
+                  className="flex-1 border-primary text-primary hover:bg-primary/10 text-lg py-7 rounded-xl cursor-pointer"
+                >
+                  <Link href="/cart">Buy Now</Link>
+                </Button>
             </div>
           </div>
 

@@ -4,6 +4,8 @@ import "./globals.css";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import { Toaster } from "react-hot-toast";
+import { CartProvider } from "@/lib/cart-context";
+import { AuthProvider } from "@/context/auth-context";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -24,12 +26,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.variable} font-sans antialiased`}>
-        <Navbar />
-        {children}
-        <Footer />
+        <AuthProvider>
+          <CartProvider>
+            <Navbar />
+            {children}
+            <Footer />
+          </CartProvider>
+        </AuthProvider>
 
         <Toaster
-          position="top-center" 
+          position="top-center"
           toastOptions={{
             duration: 4000, // how long toasts stay
             style: {
@@ -39,7 +45,7 @@ export default function RootLayout({
             },
             success: {
               style: {
-                background: "#503217", 
+                background: "#503217",
                 color: "white",
               },
             },

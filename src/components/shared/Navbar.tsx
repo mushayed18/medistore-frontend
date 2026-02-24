@@ -2,11 +2,16 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useCurrentUser } from "@/hooks/useAuth"; // ← import hook
-import { Avatar, AvatarBadge, AvatarFallback } from "@/components/ui/avatar";
+import { useCart } from "@/lib/cart-context";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { ShoppingCart } from "lucide-react";
+import { useAuth } from "@/context/auth-context";
 
 export default function Navbar() {
-  const { user, loading, logout } = useCurrentUser();
+  // const { user, loading, logout } = useCurrentUser();
+  const { user, loading, logout } = useAuth();
+  const { cartCount } = useCart();
   const [isOpen, setIsOpen] = useState(false);
 
   // Role-based links
@@ -23,7 +28,6 @@ export default function Navbar() {
         { href: "/", label: "Home" },
         { href: "/medicines", label: "Medicines" },
         { href: "/orders", label: "My Orders" },
-        { href: "/cart", label: "Cart" },
       ];
     }
 
@@ -48,69 +52,59 @@ export default function Navbar() {
   const links = getLinks();
 
   return (
-    <nav className="bg-primary text-white shadow-md">
+    <nav className="bg-primary text-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center text-white">
+        <div className="flex justify-between h-16 items-center">
           {/* Logo */}
-          <Link href={"/"}>
-            <div className="flex items-center gap-2">
-              {/* Medical cross icon */}
-              <svg
-                width="32"
-                height="32"
-                viewBox="0 0 32 32"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="text-white"
-              >
-                <circle
-                  cx="16"
-                  cy="16"
-                  r="15"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                />
-                <path
-                  d="M16 8v16M8 16h16"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                />
-              </svg>
-              <span className="font-serif text-3xl tracking-wide">
-                MediStore
-              </span>
-            </div>
+          <Link href="/" className="flex items-center gap-2">
+            <span className="font-serif text-3xl tracking-wide">MediStore</span>
           </Link>
 
-          {/* Desktop Links */}
-          <div className="hidden md:flex space-x-8 items-center">
+          {/* Desktop Menu */}
+          <div className="hidden md:flex items-center space-x-8">
             {links.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="hover:text-secondary transition"
+                className="hover:text-secondary transition-colors duration-200 font-medium"
               >
                 {link.label}
               </Link>
             ))}
 
-            {/* Profile / Auth */}
+            {/* Auth / Profile / Cart */}
             {loading ? (
-              <span>Loading...</span>
+              <div className="h-8 w-8 bg-secondary/30 rounded-full animate-pulse" />
             ) : user ? (
-              <div className="flex items-center gap-3">
-                <Avatar className="h-9 w-9">
-                  <AvatarFallback className="bg-secondary text-primary font-medium">
-                    {user.name?.[0]?.toUpperCase() || "U"}
-                  </AvatarFallback>
-                </Avatar>
-                <AvatarBadge className="bg-secondary text-primary text-xs">
-                  {user.role}
-                </AvatarBadge>
+              <div className="flex items-center gap-4">
+                {/* Cart Icon with Badge */}
+                <Link href="/cart" className="relative hover:text-secondary transition">
+                  <ShoppingCart className="h-6 w-6" />
+                  {cartCount > 0 && (
+                    <Badge
+                      variant="destructive"
+                      className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 text-xs flex items-center justify-center bg-red-500 text-white"
+                    >
+                      {cartCount}
+                    </Badge>
+                  )}
+                </Link>
+
+                {/* Profile Avatar + Role */}
+                <div className="flex items-center gap-3">
+                  <Avatar className="h-9 w-9 border-2 border-secondary/50">
+                    <AvatarFallback className="bg-secondary text-primary font-semibold">
+                      {user.name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || "U"}
+                    </AvatarFallback>
+                  </Avatar>
+                  <Badge variant="outline" className="text-xs bg-secondary/20 text-secondary border-secondary/40">
+                    {user.role}
+                  </Badge>
+                </div>
+
                 <button
                   onClick={logout}
-                  className="hover:text-secondary transition cursor-pointer"
+                  className="hover:text-secondary transition font-medium cursor-pointer"
                 >
                   Logout
                 </button>
@@ -118,7 +112,7 @@ export default function Navbar() {
             ) : (
               <Link
                 href="/auth/login"
-                className="hover:text-secondary transition"
+                className="hover:text-secondary transition font-medium"
               >
                 Login
               </Link>
@@ -129,28 +123,13 @@ export default function Navbar() {
           <button
             className="md:hidden focus:outline-none"
             onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle menu"
           >
-            {/* Hamburger icon */}
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
+            <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               {isOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16m-7 6h7"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               )}
             </svg>
           </button>
@@ -159,13 +138,13 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-primary">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <div className="md:hidden bg-primary border-t border-secondary/20">
+          <div className="px-4 pt-4 pb-6 space-y-4">
             {links.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="block px-3 py-2 rounded-md hover:bg-secondary/20"
+                className="block px-4 py-3 rounded-lg hover:bg-secondary/20 transition"
                 onClick={() => setIsOpen(false)}
               >
                 {link.label}
@@ -173,25 +152,45 @@ export default function Navbar() {
             ))}
 
             {loading ? (
-              <span className="block px-3 py-2">Loading...</span>
+              <div className="px-4 py-3 text-center text-gray-300">Loading...</div>
             ) : user ? (
               <>
-                <div className="px-3 py-2 flex items-center gap-3">
-                  <Avatar className="h-8 w-8">
-                    <AvatarFallback className="bg-secondary text-primary">
+                {/* Cart in mobile */}
+                <Link
+                  href="/cart"
+                  className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary/20 transition"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <ShoppingCart className="h-5 w-5" />
+                  <span>Cart</span>
+                  {cartCount > 0 && (
+                    <Badge variant="destructive" className="ml-auto">
+                      {cartCount}
+                    </Badge>
+                  )}
+                </Link>
+
+                {/* Profile in mobile */}
+                <div className="px-4 py-3 flex items-center gap-3 border-t border-secondary/20 mt-2 pt-4">
+                  <Avatar className="h-10 w-10">
+                    <AvatarFallback className="bg-secondary text-primary font-semibold">
                       {user.name?.[0]?.toUpperCase() || "U"}
                     </AvatarFallback>
                   </Avatar>
-                  <AvatarBadge className="bg-secondary text-primary text-xs">
-                    {user.role}
-                  </AvatarBadge>
+                  <div>
+                    <p className="font-medium">{user.name || user.email}</p>
+                    <Badge variant="outline" className="text-xs mt-1">
+                      {user.role}
+                    </Badge>
+                  </div>
                 </div>
+
                 <button
                   onClick={() => {
                     logout();
                     setIsOpen(false);
                   }}
-                  className="cursor-pointer block w-full text-left px-3 py-2 rounded-md hover:bg-secondary/20"
+                  className="w-full text-left px-4 py-3 rounded-lg hover:bg-secondary/20 transition text-red-400 font-medium"
                 >
                   Logout
                 </button>
@@ -199,7 +198,7 @@ export default function Navbar() {
             ) : (
               <Link
                 href="/auth/login"
-                className="block px-3 py-2 rounded-md hover:bg-secondary/20"
+                className="block px-4 py-3 rounded-lg hover:bg-secondary/20 transition font-medium"
                 onClick={() => setIsOpen(false)}
               >
                 Login

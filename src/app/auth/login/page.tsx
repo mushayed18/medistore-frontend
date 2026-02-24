@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import toast from "react-hot-toast"; // for nice toasts
+import { useAuth } from "@/context/auth-context";
 
 export default function LoginPage() {
   // Form state
@@ -14,23 +15,28 @@ export default function LoginPage() {
 
   const router = useRouter();
 
+  const { setUser } = useAuth();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/sign-in/email`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/sign-in/email`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+          credentials: "include", // crucial — sends cookies/session
         },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-        credentials: "include", // crucial — sends cookies/session
-      });
+      );
 
       const data = await res.json();
 
@@ -38,6 +44,8 @@ export default function LoginPage() {
         setError(data.message || "Invalid email or password");
         return;
       }
+
+      setUser(data.user);
 
       // Success toast
       toast.success("Login successful! Redirecting...");
@@ -50,9 +58,13 @@ export default function LoginPage() {
       } else {
         router.push("/"); // home or /medicines for customer
       }
+
+      router.refresh();
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
-      setError("Something went wrong. Please try again. Error: " + errorMessage);
+      setError(
+        "Something went wrong. Please try again. Error: " + errorMessage,
+      );
     } finally {
       setLoading(false);
     }
