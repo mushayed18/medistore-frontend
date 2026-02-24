@@ -39,6 +39,7 @@ export default function MedicineList({ initialData }: { initialData: MedicineRes
   // Fetch whenever page or ANY filter changes
   useEffect(() => {
     fetchAndUpdate();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, search, manufacturer, minPrice, maxPrice]);
 
   return (

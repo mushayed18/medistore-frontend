@@ -28,3 +28,21 @@ export async function getMedicines(
 
   return res.json();
 }
+
+
+
+import { SingleMedicineResponse } from "@/types/medicine";
+
+export async function getSingleMedicine(id: string) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/medicines/${id}`,
+    { cache: "no-store" }
+  );
+
+  if (!res.ok) {
+    return null;
+  }
+
+  const data: SingleMedicineResponse = await res.json();
+  return data;
+}
