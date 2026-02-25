@@ -78,7 +78,10 @@ export default function Navbar() {
             ) : user ? (
               <div className="flex items-center gap-4">
                 {/* Cart Icon with Badge */}
-                <Link href="/cart" className="relative hover:text-secondary transition">
+                <Link
+                  href="/cart"
+                  className="relative hover:text-secondary transition"
+                >
                   <ShoppingCart className="h-6 w-6" />
                   {cartCount > 0 && (
                     <Badge
@@ -92,12 +95,19 @@ export default function Navbar() {
 
                 {/* Profile Avatar + Role */}
                 <div className="flex items-center gap-3">
-                  <Avatar className="h-9 w-9 border-2 border-secondary/50">
-                    <AvatarFallback className="bg-secondary text-primary font-semibold">
-                      {user.name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || "U"}
-                    </AvatarFallback>
-                  </Avatar>
-                  <Badge variant="outline" className="text-xs bg-secondary/20 text-secondary border-secondary/40">
+                  <Link href="/profile">
+                    <Avatar className="h-9 w-9 border-2 border-secondary/50 cursor-pointer">
+                      <AvatarFallback className="bg-secondary text-primary font-semibold">
+                        {user.name?.[0]?.toUpperCase() ||
+                          user.email?.[0]?.toUpperCase() ||
+                          "U"}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Link>
+                  <Badge
+                    variant="outline"
+                    className="text-xs bg-secondary/20 text-secondary border-secondary/40"
+                  >
                     {user.role}
                   </Badge>
                 </div>
@@ -125,11 +135,26 @@ export default function Navbar() {
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
           >
-            <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg
+              className="h-7 w-7"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               {isOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
               )}
             </svg>
           </button>
@@ -152,7 +177,9 @@ export default function Navbar() {
             ))}
 
             {loading ? (
-              <div className="px-4 py-3 text-center text-gray-300">Loading...</div>
+              <div className="px-4 py-3 text-center text-gray-300">
+                Loading...
+              </div>
             ) : user ? (
               <>
                 {/* Cart in mobile */}
@@ -172,11 +199,13 @@ export default function Navbar() {
 
                 {/* Profile in mobile */}
                 <div className="px-4 py-3 flex items-center gap-3 border-t border-secondary/20 mt-2 pt-4">
-                  <Avatar className="h-10 w-10">
-                    <AvatarFallback className="bg-secondary text-primary font-semibold">
-                      {user.name?.[0]?.toUpperCase() || "U"}
-                    </AvatarFallback>
-                  </Avatar>
+                  <Link href="/profile">
+                    <Avatar className="h-10 w-10">
+                      <AvatarFallback className="bg-secondary text-primary font-semibold">
+                        {user.name?.[0]?.toUpperCase() || "U"}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Link>
                   <div>
                     <p className="font-medium">{user.name || user.email}</p>
                     <Badge variant="outline" className="text-xs mt-1">
