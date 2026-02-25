@@ -27,7 +27,7 @@ export default function Navbar() {
       return [
         { href: "/", label: "Home" },
         { href: "/medicines", label: "Medicines" },
-        { href: "/orders", label: "My Orders" },
+        { href: "/my-orders", label: "My Orders" },
       ];
     }
 

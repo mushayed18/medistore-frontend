@@ -33,11 +33,17 @@ export default function CheckoutPage() {
           <div className="w-24 h-24 mx-auto bg-primary/10 rounded-full flex items-center justify-center mb-6">
             <ShoppingBag className="h-12 w-12 text-primary" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Your cart is empty</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">
+            Your cart is empty
+          </h1>
           <p className="text-gray-600 mb-8 leading-relaxed">
             Add some medicines to your cart before proceeding to checkout.
           </p>
-          <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-white px-10">
+          <Button
+            asChild
+            size="lg"
+            className="bg-primary hover:bg-primary/90 text-white px-10"
+          >
             <Link href="/medicines">Start Shopping</Link>
           </Button>
         </div>
@@ -45,12 +51,15 @@ export default function CheckoutPage() {
     );
   }
 
-  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const tax = subtotal * 0.05;
-  const shipping = 50;
-  const total = subtotal + tax + shipping;
+  const subtotal = cart.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0,
+  );
+  const total = subtotal;
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -58,7 +67,13 @@ export default function CheckoutPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.shippingName || !formData.shippingPhone || !formData.shippingAddress || !formData.shippingCity || !formData.shippingZip) {
+    if (
+      !formData.shippingName ||
+      !formData.shippingPhone ||
+      !formData.shippingAddress ||
+      !formData.shippingCity ||
+      !formData.shippingZip
+    ) {
       toast.error("Please fill all required shipping details");
       return;
     }
@@ -66,25 +81,28 @@ export default function CheckoutPage() {
     setLoading(true);
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/orders`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/orders`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            items: cart.map((item) => ({
+              medicineId: item.id,
+              quantity: item.quantity,
+            })),
+            shippingName: formData.shippingName,
+            shippingPhone: formData.shippingPhone,
+            shippingAddress: formData.shippingAddress,
+            shippingCity: formData.shippingCity,
+            shippingZip: formData.shippingZip,
+            orderNotes: formData.orderNotes.trim() || undefined,
+          }),
         },
-        credentials: "include",
-        body: JSON.stringify({
-          items: cart.map((item) => ({
-            medicineId: item.id,
-            quantity: item.quantity,
-          })),
-          shippingName: formData.shippingName,
-          shippingPhone: formData.shippingPhone,
-          shippingAddress: formData.shippingAddress,
-          shippingCity: formData.shippingCity,
-          shippingZip: formData.shippingZip,
-          orderNotes: formData.orderNotes.trim() || undefined,
-        }),
-      });
+      );
 
       const json = await res.json();
 
@@ -96,19 +114,22 @@ export default function CheckoutPage() {
         duration: 5000,
         position: "top-center",
         style: {
-          background: "#10B981",
+          background: "#503217",
           color: "white",
           borderRadius: "12px",
         },
       });
 
       clearCart();
-      router.push("/orders"); // or "/thank-you" or "/orders/success"
+      router.push("/my-orders"); // or "/thank-you" or "/orders/success"
     } catch (err) {
-      toast.error((err as Error).message || "Something went wrong. Please try again.", {
-        duration: 6000,
-        position: "top-center",
-      });
+      toast.error(
+        (err as Error).message || "Something went wrong. Please try again.",
+        {
+          duration: 6000,
+          position: "top-center",
+        },
+      );
     } finally {
       setLoading(false);
     }
@@ -121,7 +142,8 @@ export default function CheckoutPage() {
           Checkout
         </h1>
         <p className="text-center text-gray-600 text-lg mb-12 max-w-2xl mx-auto">
-          Please review your order and enter shipping details to complete your purchase
+          Please review your order and enter shipping details to complete your
+          purchase
         </p>
 
         <div className="grid md:grid-cols-5 gap-10 lg:gap-12">
@@ -136,7 +158,10 @@ export default function CheckoutPage() {
 
               <div className="divide-y divide-gray-100">
                 {cart.map((item) => (
-                  <div key={item.id} className="p-6 flex items-center gap-6 hover:bg-gray-50 transition">
+                  <div
+                    key={item.id}
+                    className="p-6 flex items-center gap-6 hover:bg-gray-50 transition"
+                  >
                     {/* Image */}
                     <div className="w-20 h-20 bg-linear-to-br from-primary/5 to-secondary/10 rounded-lg flex items-center justify-center shrink-0">
                       <span className="text-4xl opacity-40">💊</span>
@@ -168,22 +193,14 @@ export default function CheckoutPage() {
           {/* Right: Summary + Form */}
           <div className="md:col-span-2">
             <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 sticky top-10">
-              <h2 className="text-2xl font-bold text-[#503217] mb-6">Order Summary</h2>
+              <h2 className="text-2xl font-bold text-[#503217] mb-6">
+                Order Summary
+              </h2>
 
               <div className="space-y-5 text-gray-700">
                 <div className="flex justify-between text-base">
                   <span>Subtotal ({cart.length} items)</span>
                   <span className="font-medium">৳{subtotal.toFixed(2)}</span>
-                </div>
-
-                <div className="flex justify-between text-base">
-                  <span>Shipping</span>
-                  <span className="font-medium">৳{shipping.toFixed(2)}</span>
-                </div>
-
-                <div className="flex justify-between text-base">
-                  <span>Tax (5%)</span>
-                  <span className="font-medium">৳{tax.toFixed(2)}</span>
                 </div>
 
                 <div className="border-t border-gray-200 pt-5 mt-3">
@@ -207,7 +224,7 @@ export default function CheckoutPage() {
                     onChange={handleInputChange}
                     required
                     className="mt-1.5 h-11"
-                    placeholder="Bob the builder"
+                    placeholder="Enter you name"
                   />
                 </div>
 
@@ -222,7 +239,7 @@ export default function CheckoutPage() {
                     onChange={handleInputChange}
                     required
                     className="mt-1.5 h-11"
-                    placeholder="01912345678"
+                    placeholder="Enter your phone number"
                   />
                 </div>
 

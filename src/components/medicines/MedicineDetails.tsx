@@ -6,7 +6,6 @@ import { Star, Package, Factory, Tags, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/lib/cart-context";
-import Link from "next/link";
 
 interface Props {
   medicine: Medicine;
@@ -145,14 +144,6 @@ export default function MedicineDetails({ medicine }: Props) {
               >
                 Add to Cart
               </Button>
-
-              
-                <Button
-                  variant="outline"
-                  className="flex-1 border-primary text-primary hover:bg-primary/10 text-lg py-7 rounded-xl cursor-pointer"
-                >
-                  <Link href="/cart">Buy Now</Link>
-                </Button>
             </div>
           </div>
 

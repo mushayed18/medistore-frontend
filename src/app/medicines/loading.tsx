@@ -3,7 +3,7 @@ import MedicineSkeletonCard from "@/components/medicines/MedicineSkeletonCard";
 export default function Loading() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
-      <h1 className="text-3xl font-bold text-primary mb-8">
+      <h1 className="text-3xl font-bold text-primary text-center mb-8">
         All Medicines
       </h1>
 

@@ -16,9 +16,7 @@ export default function CartPage() {
     (sum, item) => sum + item.price * item.quantity,
     0,
   );
-  const tax = subtotal * 0.05; // 5% tax
-  const shipping = subtotal > 0 ? 50 : 0; // fixed shipping
-  const total = subtotal + tax + shipping;
+  const total = subtotal;
 
   const handleQuantityChange = (id: string, newQty: number) => {
     if (newQty < 1) {
@@ -152,16 +150,6 @@ export default function CartPage() {
               <div className="flex justify-between">
                 <span>Subtotal ({cart.length} items)</span>
                 <span>৳{subtotal.toFixed(2)}</span>
-              </div>
-
-              <div className="flex justify-between">
-                <span>Tax (5%)</span>
-                <span>৳{tax.toFixed(2)}</span>
-              </div>
-
-              <div className="flex justify-between">
-                <span>Shipping</span>
-                <span>৳{shipping.toFixed(2)}</span>
               </div>
 
               <div className="border-t pt-4 mt-4">
