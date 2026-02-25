@@ -44,8 +44,10 @@ export default function Navbar() {
     return [
       { href: "/", label: "Home" },
       { href: "/medicines", label: "Medicines" },
-      { href: "/orders", label: "All Orders" },
-      { href: "/users", label: "All Users" },
+      { href: "/admin/categories", label: "Manage Categories" },
+      { href: "/admin/medicines", label: "Manage Medicines" },
+      { href: "/admin/orders", label: "All Orders" },
+      { href: "/admin/users", label: "All Users" },
     ];
   };
 
@@ -78,20 +80,22 @@ export default function Navbar() {
             ) : user ? (
               <div className="flex items-center gap-4">
                 {/* Cart Icon with Badge */}
-                <Link
-                  href="/cart"
-                  className="relative hover:text-secondary transition"
-                >
-                  <ShoppingCart className="h-6 w-6" />
-                  {cartCount > 0 && (
-                    <Badge
-                      variant="destructive"
-                      className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 text-xs flex items-center justify-center bg-red-500 text-white"
-                    >
-                      {cartCount}
-                    </Badge>
-                  )}
-                </Link>
+                {user.role === "CUSTOMER" && (
+                  <Link
+                    href="/cart"
+                    className="relative hover:text-secondary transition"
+                  >
+                    <ShoppingCart className="h-6 w-6" />
+                    {cartCount > 0 && (
+                      <Badge
+                        variant="destructive"
+                        className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 text-xs flex items-center justify-center bg-red-500 text-white"
+                      >
+                        {cartCount}
+                      </Badge>
+                    )}
+                  </Link>
+                )}
 
                 {/* Profile Avatar + Role */}
                 <div className="flex items-center gap-3">
@@ -183,19 +187,21 @@ export default function Navbar() {
             ) : user ? (
               <>
                 {/* Cart in mobile */}
-                <Link
-                  href="/cart"
-                  className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary/20 transition"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <ShoppingCart className="h-5 w-5" />
-                  <span>Cart</span>
-                  {cartCount > 0 && (
-                    <Badge variant="destructive" className="ml-auto">
-                      {cartCount}
-                    </Badge>
-                  )}
-                </Link>
+                {user.role === "CUSTOMER" && (
+                  <Link
+                    href="/cart"
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-secondary/20 transition"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <ShoppingCart className="h-5 w-5" />
+                    <span>Cart</span>
+                    {cartCount > 0 && (
+                      <Badge variant="destructive" className="ml-auto">
+                        {cartCount}
+                      </Badge>
+                    )}
+                  </Link>
+                )}
 
                 {/* Profile in mobile */}
                 <div className="px-4 py-3 flex items-center gap-3 border-t border-secondary/20 mt-2 pt-4">

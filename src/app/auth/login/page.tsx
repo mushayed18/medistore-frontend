@@ -52,7 +52,7 @@ export default function LoginPage() {
 
       // Redirect based on role (you can customize)
       if (data.user.role === "ADMIN") {
-        router.push("/dashboard/admin");
+        router.push("/");
       } else if (data.user.role === "SELLER") {
         router.push("/dashboard/seller");
       } else {
