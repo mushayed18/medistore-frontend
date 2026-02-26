@@ -35,8 +35,8 @@ export default function Navbar() {
       return [
         { href: "/", label: "Home" },
         { href: "/medicines", label: "Medicines" },
-        { href: "/medicines/my-medicines", label: "My Medicines" },
-        { href: "/orders", label: "My Orders" },
+        { href: "/seller/my-medicines", label: "My Medicines" },
+        { href: "/seller/my-orders", label: "My Orders" },
       ];
     }
 

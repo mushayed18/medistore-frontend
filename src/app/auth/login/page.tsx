@@ -54,7 +54,7 @@ export default function LoginPage() {
       if (data.user.role === "ADMIN") {
         router.push("/");
       } else if (data.user.role === "SELLER") {
-        router.push("/dashboard/seller");
+        router.push("/");
       } else {
         router.push("/"); // home or /medicines for customer
       }
