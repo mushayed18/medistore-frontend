@@ -128,6 +128,7 @@ export default function MedicineDetails({ medicine }: Props) {
             </div>
 
             {/* Action Buttons */}
+            {}
             <div className="flex flex-col sm:flex-row gap-4 pt-6">
               <Button
                 type="button"
