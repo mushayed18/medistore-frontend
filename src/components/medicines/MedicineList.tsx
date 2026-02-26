@@ -9,25 +9,73 @@ import MedicineSkeletonCard from "./MedicineSkeletonCard";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { getCategories } from "@/services/category";
 
-export default function MedicineList({ initialData }: { initialData: MedicineResponse }) {
+interface Category {
+  id: string;
+  name: string;
+}
+
+export default function MedicineList({
+  initialData,
+}: {
+  initialData: MedicineResponse;
+}) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
   const [data, setData] = useState<MedicineResponse>(initialData);
   const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   // Filter states synced from URL
   const [search, setSearch] = useState(searchParams.get("search") || "");
-  const [manufacturer, setManufacturer] = useState(searchParams.get("manufacturer") || "");
-  const [minPrice, setMinPrice] = useState(Number(searchParams.get("minPrice")) || 0);
-  const [maxPrice, setMaxPrice] = useState(Number(searchParams.get("maxPrice")) || 1000);
+  const [manufacturer, setManufacturer] = useState(
+    searchParams.get("manufacturer") || "",
+  );
+  const [categoryId, setCategoryId] = useState(
+    searchParams.get("categoryId") || "",
+  );
+  const [minPrice, setMinPrice] = useState(
+    Number(searchParams.get("minPrice")) || 0,
+  );
+  const [maxPrice, setMaxPrice] = useState(
+    Number(searchParams.get("maxPrice")) || 1000,
+  );
   const page = Number(searchParams.get("page")) || 1;
+
+  // Load categories once
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const cats = await getCategories();
+        setCategories(cats);
+      } catch (err) {
+        console.error("Failed to load categories", err);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   const fetchAndUpdate = async () => {
     setLoading(true);
     try {
-      const newData = await getMedicines(page, 6, search, minPrice, maxPrice, manufacturer);
+      const newData = await getMedicines(
+        page,
+        6,
+        search,
+        minPrice,
+        maxPrice,
+        manufacturer,
+        categoryId,
+      );
       setData(newData);
     } catch (err) {
       console.error("Fetch error:", err);
@@ -40,7 +88,20 @@ export default function MedicineList({ initialData }: { initialData: MedicineRes
   useEffect(() => {
     fetchAndUpdate();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, search, manufacturer, minPrice, maxPrice]);
+  }, [page, search, manufacturer, categoryId, minPrice, maxPrice]);
+
+  // Optional: Sync URL with filters (nice UX)
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (search) params.set("search", search);
+    if (manufacturer) params.set("manufacturer", manufacturer);
+    if (categoryId) params.set("categoryId", categoryId);
+    if (minPrice > 0) params.set("minPrice", minPrice.toString());
+    if (maxPrice < 1000) params.set("maxPrice", maxPrice.toString());
+    params.set("page", page.toString());
+
+    router.replace(`/medicines?${params.toString()}`, { scroll: false });
+  }, [search, manufacturer, categoryId, minPrice, maxPrice, page, router]);
 
   return (
     <div>
@@ -57,7 +118,9 @@ export default function MedicineList({ initialData }: { initialData: MedicineRes
           </div>
 
           <div>
-            <label className="block text-sm mb-1 text-gray-700">Manufacturer</label>
+            <label className="block text-sm mb-1 text-gray-700">
+              Manufacturer
+            </label>
             <Input
               placeholder="Beximco, Square..."
               value={manufacturer}
@@ -65,7 +128,23 @@ export default function MedicineList({ initialData }: { initialData: MedicineRes
             />
           </div>
 
-          <div className="md:col-span-2">
+          <div>
+            <label className="block text-sm mb-1 text-gray-700">Category</label>
+            <Select value={categoryId} onValueChange={setCategoryId}>
+              <SelectTrigger>
+                <SelectValue placeholder="All Categories" />
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((cat) => (
+                  <SelectItem key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="md:col-span-1">
             <label className="block text-sm mb-1 text-gray-700">
               Price (৳{minPrice} – ৳{maxPrice})
             </label>

@@ -40,6 +40,12 @@ export default function LoginPage() {
 
       const data = await res.json();
 
+      if(data.user.status === "BANNED") {
+        setError("Your account has been banned. Please contact support.");
+        setLoading(false);
+        return;
+      }
+
       if (!res.ok) {
         setError(data.message || "Invalid email or password");
         return;

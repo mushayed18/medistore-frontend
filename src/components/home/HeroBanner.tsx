@@ -17,7 +17,7 @@ export default function HeroBanner() {
           </p>
           <div className="mt-8">
             <Link
-              href="/"
+              href="/medicines"
               className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
             >
               <IoBagHandleOutline className="h-4 w-4" />

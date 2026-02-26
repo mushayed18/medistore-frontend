@@ -6,6 +6,7 @@ import { Star, Package, Factory, Tags, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/lib/cart-context";
+import { useCurrentUser } from "@/hooks/useAuth";
 
 interface Props {
   medicine: Medicine;
@@ -19,6 +20,8 @@ export default function MedicineDetails({ medicine }: Props) {
       : 0;
 
   const { addToCart } = useCart();
+
+  const { user } = useCurrentUser();
 
   return (
     <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
@@ -128,24 +131,25 @@ export default function MedicineDetails({ medicine }: Props) {
             </div>
 
             {/* Action Buttons */}
-            {}
-            <div className="flex flex-col sm:flex-row gap-4 pt-6">
-              <Button
-                type="button"
-                className="flex-1 bg-primary hover:bg-primary/90 text-white text-lg py-7 rounded-xl cursor-pointer"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  addToCart({
-                    id: medicine.id,
-                    name: medicine.name,
-                    price: medicine.price,
-                    quantity: 1, // default 1, or make input later
-                  });
-                }}
-              >
-                Add to Cart
-              </Button>
-            </div>
+            {user?.role === "CUSTOMER" ? (
+              <div className="flex flex-col sm:flex-row gap-4 pt-6">
+                <Button
+                  type="button"
+                  className="flex-1 bg-primary hover:bg-primary/90 text-white text-lg py-7 rounded-xl cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    addToCart({
+                      id: medicine.id,
+                      name: medicine.name,
+                      price: medicine.price,
+                      quantity: 1,
+                    });
+                  }}
+                >
+                  Add to Cart
+                </Button>
+              </div>
+            ) : null}
           </div>
 
           {/* Right Column - Reviews */}

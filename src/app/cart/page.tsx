@@ -4,7 +4,6 @@ import { useCart } from "@/lib/cart-context";
 import { Button } from "@/components/ui/button";
 import { Trash2, Plus, Minus, ShoppingBag } from "lucide-react";
 import Link from "next/link";
-import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 export default function CartPage() {
@@ -28,7 +27,6 @@ export default function CartPage() {
 
   const handleClearCart = () => {
     clearCart();
-    toast.success("Cart cleared");
   };
 
   if (cart.length === 0) {
@@ -115,7 +113,6 @@ export default function CartPage() {
                       <button
                         onClick={() => {
                           removeFromCart(item.id);
-                          toast.success(`${item.name} removed`);
                         }}
                         className="text-red-500 hover:text-red-700 transition cursor-pointer"
                         aria-label="Remove item"
