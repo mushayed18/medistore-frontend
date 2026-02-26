@@ -31,11 +31,10 @@ export default function OrderStatusModal({
   onSuccess,
 }: Props) {
   const [loading, setLoading] = useState(false);
-  const [newStatus, setNewStatus] = useState(currentStatus);
+  const [newStatus, setNewStatus] = useState("PENDING");
 
   const possibleStatuses = ["PENDING", "SHIPPED", "DELIVERED", "CANCELLED"];
-  const nextStatuses = possibleStatuses.filter(s => s !== currentStatus);
-
+  
   const handleUpdate = async () => {
     setLoading(true);
 
@@ -69,7 +68,7 @@ export default function OrderStatusModal({
             onChange={(e) => setNewStatus(e.target.value)}
             className="flex h-10 w-full mt-2 rounded-md border border-input bg-background px-3 py-2 text-sm"
           >
-            {nextStatuses.map(status => (
+            {possibleStatuses.map(status => (
               <option key={status} value={status}>
                 {status}
               </option>
@@ -87,7 +86,7 @@ export default function OrderStatusModal({
           </Button>
           <Button
             onClick={handleUpdate}
-            disabled={loading || newStatus === currentStatus}
+            disabled={loading}
             className="bg-primary hover:bg-primary/90"
           >
             {loading ? (
