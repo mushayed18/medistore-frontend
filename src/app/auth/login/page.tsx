@@ -66,10 +66,10 @@ export default function LoginPage() {
       }
 
       router.refresh();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(
-        "Something went wrong. Please try again. Error: " + errorMessage,
+        "Invalid email or password. Please try again.",
       );
     } finally {
       setLoading(false);

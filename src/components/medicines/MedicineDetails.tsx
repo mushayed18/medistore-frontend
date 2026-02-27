@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/lib/cart-context";
 import { useCurrentUser } from "@/hooks/useAuth";
+import ReviewForm from "../reviews/ReviewForm";
 
 interface Props {
   medicine: Medicine;
@@ -156,6 +157,17 @@ export default function MedicineDetails({ medicine }: Props) {
           <div>
             <ReviewList reviews={medicine.reviews} />
           </div>
+
+          <ReviewForm
+            medicineId={medicine.id}
+            onReviewSubmitted={() => {
+              // Refresh medicine data to show new review & update average
+              // If you have a refetch function from parent page or context, call it
+              // For now, you can reload or use a state refresh
+              window.location.reload(); // simple way for demo
+              // Better: pass a refetch prop from page
+            }}
+          />
         </div>
       </div>
     </div>
