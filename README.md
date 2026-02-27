@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MediStore - Online Medicine Store
 
-## Getting Started
+A full-stack **online medicine store** built with Next.js, TypeScript, Tailwind CSS, and Shadcn UI.  
+Users can browse medicines, add to cart, place orders, leave reviews, and track their orders.  
+Admins manage medicines, categories, orders, and users (including banning).  
+Sellers manage their own medicines and view orders containing their products.
 
-First, run the development server:
+**Live Demo**: (Vercel/Netlify link here)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Customer
+- Browse medicines with search, category, price range, manufacturer filters
+- View detailed medicine info (description, stock, reviews, average rating)
+- Add to cart & checkout
+- View & manage profile
+- View order history 
+- Leave reviews after purchase
+- Cancel pending orders
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Seller
+- Manage own medicines 
+- View orders containing their medicines 
+- Update order status (SHIPPED, DELIVERED, CANCELLED) for orders with their items
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Admin
+- Manage categories 
+- Manage all medicines 
+- Manage users (view list, ban/activate)
+- Manage all orders (view list, update status, view details)
+- Protected routes with role-based middleware
 
-## Learn More
+### General
+- Responsive design (mobile-first)
+- Role-based route protection (middleware)
+- Real-time cart (context-based)
+- Toast notifications (react-hot-toast)
+- Pagination & search in lists
+- Loading skeletons
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
